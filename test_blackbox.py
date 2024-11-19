@@ -1,38 +1,20 @@
-# Naming of this file is important, it must be in the form of test_<something>.py
-from app import app
 import unittest
-from dotenv import load_dotenv
+from app import calculate_sum, get_status
 
+class TestInternalFunctions(unittest.TestCase):
+    def test_calculate_sum_valid(self):
+        self.assertEqual(calculate_sum(5, 3), 8)
+        self.assertAlmostEqual(calculate_sum(1.2, 3.4), 4.6)
 
-class RouteTest(unittest.TestCase):
-    # setUp function, creates the application test instance
-    def setUp(self):
-        load_dotenv("../.env")
-        self.app = app.test_client()
-        self.app.testing = True
+    def test_calculate_sum_invalid(self):
+        with self.assertRaises(ValueError):
+            calculate_sum("5", 3)
+        with self.assertRaises(ValueError):
+            calculate_sum(None, 3)
 
-    # Test functions must be named as test_<name>
-    def test_index_get(self):
-        # mock sending a request to the index page
-        response = self.app.get("/")
-
-        # check if the response is 200
-        self.assertEqual(response.status_code, 200)
-
-    def test_index_post(self):
-        # mock sending a request to the index page
-        response = self.app.post("/")
-
-        # check if the response is 405
-        self.assertEqual(response.status_code, 405)
-
-    def test_products(self):
-        # mock sending a request to the index page
-        response = self.app.get("/products")
-
-        # check if the response is 200
-        self.assertEqual(response.status_code, 200)
-
+    def test_get_status(self):
+        self.assertEqual(get_status(), "healthy")
 
 if __name__ == "__main__":
     unittest.main()
+
