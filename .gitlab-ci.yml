@@ -11,22 +11,22 @@ variables:
 buildTest:
   stage: buildTest
   script:
-    - docker build -f Dockerfile.test -t $TEST_IMAGE .
+    - docker build -f Dockerfile.test -t IMAGE .
     - docker push $TEST_IMAGE
 
 runTest:
   stage: runTest
   script:
-    - docker pull $TEST_IMAGE
-    - docker run $TEST_IMAGE
+    - docker pull IMAGE
+    - docker run IMAGE
 
 buildApp:
   stage: buildApp
   script:
-    - docker build -t $APP_IMAGE .
-    - docker push $APP_IMAGE
+    - docker build -t IMAGE .
+    - docker push IMAGE
 
 deployGCP:
   stage: deployGCP
   script:
-    - ssh -i $GCP_SSH_KEY $GCP_USER@$GCP_VM "docker pull $APP_IMAGE && docker stop app || true && docker rm app || true && docker run -d --name app -p 80:5000 $APP_IMAGE"
+  "docker pull $APP_IMAGE && docker stop app || true && docker rm app || true && docker run -d --name app -p 80:5000 $APP_IMAGE"
